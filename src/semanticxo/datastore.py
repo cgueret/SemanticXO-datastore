@@ -20,7 +20,7 @@ DS_OBJECT_PATH = "/org/laptop/sugar/DataStore"
 # logger
 logger = logging.getLogger(DS_LOG_CHANNEL)
 
-class DataStore(object):
+class DataStore(dbus.service.Object):
     '''
     D-Bus API and logic for connecting all the other components.
     '''
@@ -30,7 +30,7 @@ class DataStore(object):
         '''
         bus_name = dbus.service.BusName(DS_SERVICE, bus=dbus.SessionBus(), replace_existing=False, allow_replacement=False)
         dbus.service.Object.__init__(self, bus_name, DS_OBJECT_PATH)
-    
+        print 'fdfd'
     @dbus.service.method(DS_DBUS_INTERFACE, in_signature='a{sv}sb', out_signature='s', async_callbacks=('async_cb', 'async_err_cb'), byte_arrays=True)
     def create(self, props, file_path, transfer_ownership, async_cb, async_err_cb):
         '''
@@ -55,13 +55,17 @@ class DataStore(object):
         
         # Execute a SPARQL query to insert the data
     
+        # Signal
+        self.Created(uid)
+        
     @dbus.service.signal(DS_DBUS_INTERFACE, signature="s")
     def Created(self, uid):
         pass
 
     @dbus.service.method(DS_DBUS_INTERFACE, in_signature='sa{sv}sb', out_signature='', async_callbacks=('async_cb', 'async_err_cb'), byte_arrays=True)
     def update(self, uid, props, file_path, transfer_ownership, async_cb, async_err_cb):
-        pass
+        # Signal
+        self.Updated(uid)
     
     @dbus.service.signal(DS_DBUS_INTERFACE, signature="s")
     def Updated(self, uid):
@@ -69,7 +73,11 @@ class DataStore(object):
 
     @dbus.service.method(DS_DBUS_INTERFACE, in_signature='a{sv}as', out_signature='aa{sv}u')
     def find(self, query, properties):
-        pass
+        '''
+        Search for an object
+        '''
+        print 'find'
+        return [], 0
 
     @dbus.service.method(DS_DBUS_INTERFACE, in_signature='s', out_signature='s', sender_keyword='sender')
     def get_filename(self, uid, sender=None):
