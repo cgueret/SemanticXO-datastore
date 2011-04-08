@@ -13,6 +13,11 @@ if os.path.exists("/tmp/olpc-session-bus"):
 
 if __name__ == "__main__":
     try:
+        entry = datastore.create()
+        entry.metadata['title'] = 'Terminal-test'
+        print entry.metadata.get_dictionary().copy()
+        datastore.write(entry)
+        
         query = {}
         query['query'] = '*Terminal*'
         objects, count = datastore.find(query, limit=2, sorting='-mtime')

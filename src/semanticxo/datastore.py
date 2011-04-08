@@ -33,6 +33,7 @@ class DataStore(dbus.service.Object):
         print 'fdfd'
     @dbus.service.method(DS_DBUS_INTERFACE, in_signature='a{sv}sb', out_signature='s', async_callbacks=('async_cb', 'async_err_cb'), byte_arrays=True)
     def create(self, props, file_path, transfer_ownership, async_cb, async_err_cb):
+        print 'create'
         '''
         Create a new object in the datastore
         '''
@@ -64,6 +65,7 @@ class DataStore(dbus.service.Object):
 
     @dbus.service.method(DS_DBUS_INTERFACE, in_signature='sa{sv}sb', out_signature='', async_callbacks=('async_cb', 'async_err_cb'), byte_arrays=True)
     def update(self, uid, props, file_path, transfer_ownership, async_cb, async_err_cb):
+        print 'update'
         # Signal
         self.Updated(uid)
     
